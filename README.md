@@ -1,5 +1,5 @@
 # Introduction
-Ansible role to install and configure HAproxy for Graylog clusters.
+Ansible role to install and configure HAproxy for Graylog clusters. The Ansible role/playbook will install the latest Haproxy as well copy the customized haproxy configuration file to the rmeote server. 
 
 
 # How to deploy the Ansible Role
@@ -20,6 +20,11 @@ frontend http
 ```
 
  * Rate limiting: Rate limiting in HAProxy stops a client from making too many requests during a window of time.
+```
+  stick-table type ip size 100k expire 30s store http_req_rate(10s)
+  http-request track-sc0 src
+  http-request deny deny_status 429 if { sc_http_req_rate(0) gt 20 }
+```
  * Restrict access to only trusted IP address or range, if it is not a public facing application.
 
 ```
@@ -48,7 +53,7 @@ We run our workload in a Kubernetes cluster, one for each environment. While the
 
 The proxy is implemented by an HAproxy instance. To install, configure and run the HAproxy, we use an Ansible role contained in the repository. The proxy is deployed via an automated Jenkins job.
 
-Currently, we are extending our offering, also to guarantee high availability for the application, therefore we are setting up a secondary installation of our cloud offering. In the beginning, this will be set up with an active-passive approach. We are going to regularly test the switchover from the primary data center and the secondary one. To enable the developers to validate the correct switchover, we install another Graylog and ELK stack in the secondary data center.
+Currently, we are extending our offering, also to guarantee high availability for the application, therefore we are setting up a secondary installation of our cloud offering. In the beginning, this will be set up with an active-passive approach. We will regularly test the switchover from the primary data centre and the secondary one. To enable the developers to validate the correct switchover, we install another Graylog and ELK stack in the secondary data center.
 
 Here, we need your help to grant access to the developers to the new Graylog cluster, via our proxy.
 
