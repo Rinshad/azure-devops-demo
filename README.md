@@ -19,6 +19,50 @@ frontend http
  * Rate limiting: Rate limiting in HAProxy stops a client from making too many requests during a window of time.
 
 
+# Introduction
+Ansible role to install and configure HAproxy for Graylog clusters.
+
+
+# How to deploy the Ansible Role
+Use the exsiting jenkin job or use the below command to run from terminal (Testing)
+```
+ansible-playbook -i hosts.ini haproxy-installation.yml
+```
+
+# Major changes
+ * Implemented Rate limiting for limiting unusual traffic.
+
+# Security hardening
+ * The HAproxy security can be increased by adding an SSL/TSL certificate for the HAproxy frontend, it encrypt traffic between the clients and HAproxy. The generated or purchased certificate can be placed under "files" directory in Ansible role. Sample changes in the haproxy configuration is given below.
+
+```
+frontend http
+  bind :443 ssl crt /etc/haproxy/cert.pem
+```
+
+ * Rate limiting: Rate limiting in HAProxy stops a client from making too many requests during a window of time.
+ * Restrict access to only trusted IP address or range, if it is not a public facing application.
+
+```
+acl trusted_network src 192.168.1.0/24
+http-request deny if !trusted_network
+```
+
+## Reference
+ - [HAproxy documentation](https://www.haproxy.com/blog/application-layer-ddos-attack-protection-with-haproxy)
+
+# The Task
+
+## Before you start
+
+Before diving into the tasks some general remarks:
+
+You are the owner of the code. You can use whatever library or framework you're comfortable with.
+
+You're focusing on the usability of the tools for the development team.
+
+## Introduction
+
 
 # The Task
 
