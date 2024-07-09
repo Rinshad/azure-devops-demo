@@ -35,6 +35,12 @@ http-request deny if !trusted_network
 ## Reference
  - [HAproxy documentation](https://www.haproxy.com/blog/application-layer-ddos-attack-protection-with-haproxy)
 
+## Suggestions to improve reliability of the code
+ * Make sure the Ansible play-book and template are correct, this can be checked with anisble-lint tool
+ * Execute the play-book lower environment like Dev or Pre-prod before applying to the production
+ * Run the play-book multiple times to make sure that the system should not change after the first run
+
+
 # The Task
 
 ## Before you start
@@ -53,7 +59,7 @@ We run our workload in a Kubernetes cluster, one for each environment. While the
 
 The proxy is implemented by an HAproxy instance. To install, configure and run the HAproxy, we use an Ansible role contained in the repository. The proxy is deployed via an automated Jenkins job.
 
-Currently, we are extending our offering, also to guarantee high availability for the application, therefore we are setting up a secondary installation of our cloud offering. In the beginning, this will be set up with an active-passive approach. We will regularly test the switchover from the primary data centre and the secondary one. To enable the developers to validate the correct switchover, we install another Graylog and ELK stack in the secondary data center.
+Currently, we are extending our offering, to also guarantee high availability for the application, therefore we are setting up a secondary installation of our cloud offering. In the beginning, this will be set up with an active-passive approach. We are going to regularly test the switchover from the primary data center and the secondary one. To enable the developers to validate the correct switchover, we install another Graylog and ELK stack in the secondary data center.
 
 Here, we need your help to grant access to the developers to the new Graylog cluster, via our proxy.
 
